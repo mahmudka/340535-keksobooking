@@ -15,9 +15,16 @@ var hotelfeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'con
 // Объявление переменных
 var map = document.querySelector('.map');
 // map.classList.remove('map--faded');
+var mapPins = document.querySelector('.map__pins');
 var mapPin = document.querySelector('.map__pin');
 var mapPinMain = document.querySelector('.map__pin--main');
 var form = document.querySelector('form');
+var fieldSet = document.querySelectorAll('fieldset');
+var formSubmit = document.querySelector('.form__submit');
+formSubmit.disabled = true;
+for (var n = 0; n < fieldSet.length; n++) {
+  fieldSet[n].disabled = true;
+}
 
 
 // Функция поиска случайного числа в диапазоне от min до max
@@ -68,17 +75,17 @@ for (var i = 0; i < titles.length; i++) {
   });
 }
 
-// Создание фрагмента для вставки
-var fragment = document.createDocumentFragment();
 
 // Функция для отрисовки маркеров
 var renderMapElement = function (mapDetail) {
+// Создание фрагмента для вставки
+//   var fragment = document.createDocumentFragment();
   var mapElement = mapPin.cloneNode(true);
-
   mapPin.style.left = mapDetail.location.x + 'px';
   mapPin.style.top = mapDetail.location.y + 'px';
   document.querySelector('.map__pin img').src = mapDetail.author.avatar;
-  mapPin.appendChild(mapElement);
+  mapPin.dataset.numPin = i;
+  // mapPin.appendChild(mapElement);
   return mapElement;
 };
 
@@ -120,16 +127,18 @@ var getFeaturesImages = function (bookingDetail) {
 // Заполение и отрисовка анонса
 var renderMapCard = function (bookingDetail) {
   var mapCardElement = mapCard.cloneNode(true);
+  var mapCardP = mapCardElement.querySelectorAll('p');
 
   mapCardElement.querySelector('h3').textContent = bookingDetail.offer.title;
-  mapCardElement.querySelector('p small').textContent = bookingDetail.offer.address;
-  mapCardElement.querySelector('.popup__price').textContent = bookingDetail.offer.price + ' &#x20bd;/ночь';
+  mapCardP[0].textContent = bookingDetail.offer.address;
+  mapCardElement.querySelector('.popup__price').innerHTML = bookingDetail.offer.price + ' &#x20bd;/ночь';
   mapCardElement.querySelector('h4').textContent = getRussianName(bookingDetail.offer.type);
-  mapCardElement.querySelector('h4 + p').textContent = bookingDetail.offer.rooms + ' для ' + bookingDetail.offer.guests + ' гостей';
-  mapCardElement.querySelector('p:nth-child(4)').textContent = 'Заезд после ' + bookingDetail.offer.checkin + ', выезд до ' + bookingDetail.offer.checkout;
+  mapCardP[2].textContent = bookingDetail.offer.rooms + ' для ' + bookingDetail.offer.guests + ' гостей';
+  mapCardP[3].textContent = 'Заезд после ' + bookingDetail.offer.checkin + ', выезд до ' + bookingDetail.offer.checkout;
   mapCardElement.querySelector('.popup__features').innerHTML = getFeaturesImages(bookingDetail.offer.features).join('');
-  mapCardElement.querySelector('p:nth-child(5)').textContent = bookingDetail.offer.description;
+  mapCardP[4].textContent = bookingDetail.offer.description;
   mapCardElement.querySelector('img').src = bookingDetail.author.avatar;
+
   // mapCard.appendChild(mapCardElement);
   return mapCardElement;
 };
@@ -143,11 +152,19 @@ mapPinMain.addEventListener('mouseup', function () {
   map.classList.remove('map--faded');
   form.classList.remove('notice__form--disabled');
   for (i = 0; i < titles.length; i++) {
-    fragment.appendChild(renderMapElement(bookingDetails[i]));
+    mapPins.appendChild(renderMapElement(bookingDetails[i]));
   }
-  mapPin.appendChild(fragment);
   map.insertBefore(renderMapCard(bookingDetails[5]), mapFilter);
-  mapCard.appendChild(fragment);
+  for (n = 0; n < fieldSet.length; n++) {
+    fieldSet[n].disabled = false;
+  }
+  formSubmit.disabled = false;
+  // mapCard.appendChild(fragment);
 });
 
-
+// Закрыто попап по клику
+// var popUpClose = document.querySelector('.popup__close');
+// popUpClose.addEventListener('click', function (evt) {
+//   evt.preventDefault();
+//   bookingDetails.classList.add('hidden');
+// });

@@ -4,6 +4,7 @@
 // Объявление констант
 var MARK_WIDTH = 32;
 var MARK_HEIGHT = 65;
+var ESC_KEYCODE = 27;
 
 // Массивы с данными
 var titles = ['Большая уютная квартира',
@@ -86,21 +87,17 @@ for (var i = 0; i < titles.length; i++) {
 // Функция для отрисовки маркеров
 var renderMapElement = function (mapDetail) {
   var mapElement = mapPin.cloneNode(true);
-  mapPin.style.left = mapDetail.location.x + 'px';
-  mapPin.style.top = mapDetail.location.y + 'px';
-  document.querySelector('.map__pin img').src = mapDetail.author.avatar;
-  mapPin.dataset.pinNumber = i;
+  mapElement.style.left = mapDetail.location.x + 'px';
+  mapElement.style.top = mapDetail.location.y + 'px';
+  mapElement.querySelector('.map__pin img').src = mapDetail.author.avatar;
   mapElement.addEventListener('click', function (evt) {
     evt.preventDefault();
     if (activeELement) {
       activeELement.classList.remove('map__pin--active');
-      mapElement.classList.add('map__pin--active');
-      activeELement = mapElement;
-    } else {
-      activeELement = mapElement;
-      evt.preventDefault();
-      mapElement.classList.add('map__pin--active');
     }
+    activeELement = mapElement;
+    mapElement.classList.add('map__pin--active');
+    map.insertBefore(renderMapCard(mapDetail), mapFilter);
   });
   return mapElement;
 };
@@ -136,8 +133,15 @@ var getFeaturesImages = function (bookingDetail) {
 };
 
 // Заполение и отрисовка анонса
+var activeMapCard = null;
 var renderMapCard = function (bookingDetail) {
-  var mapCardElement = mapCard.cloneNode(true);
+  var mapCardElement = null;
+  if (activeMapCard) {
+    mapCardElement = activeMapCard;
+    mapCardElement.classList.remove('hidden');
+  } else {
+    mapCardElement = mapCard.cloneNode(true);
+  }
   var mapCardP = mapCardElement.querySelectorAll('p');
 
   mapCardElement.querySelector('h3').textContent = bookingDetail.offer.title;
@@ -150,31 +154,44 @@ var renderMapCard = function (bookingDetail) {
   mapCardP[4].textContent = bookingDetail.offer.description;
   mapCardElement.querySelector('img').src = bookingDetail.author.avatar;
 
+  mapCardElement.querySelector('.popup__close').addEventListener('click', function () {
+    mapCardElement.classList.add('hidden');
+    activeELement.classList.remove('map__pin--active');
+  });
+
+
+  window.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      mapCardElement.classList.add('hidden');
+      activeELement.classList.remove('map__pin--active');
+    }
+  });
+
+  activeMapCard = mapCardElement;
+
   // mapCard.appendChild(mapCardElement);
   return mapCardElement;
 };
 
 
 // Снимаем затемнение
+var isOpen = false;
 mapPinMain.addEventListener('mouseup', function () {
-
+  if (isOpen) {
+    return;
+  }
   map.classList.remove('map--faded');
   form.classList.remove('notice__form--disabled');
   for (i = 0; i < titles.length; i++) {
     mapPins.appendChild(renderMapElement(bookingDetails[i]));
   }
-  map.insertBefore(renderMapCard(bookingDetails[0]), mapFilter);
+  // map.insertBefore(renderMapCard(bookingDetails[0]), mapFilter);
   for (n = 0; n < fieldSet.length; n++) {
     fieldSet[n].disabled = false;
   }
   formSubmit.disabled = false;
+  isOpen = true;
 });
-
-// var popUpClose = document.querySelector('.popup__close');
-// popUpClose.addEventListener('click', function () {
-//   mapCard.classList.add('hidden');
-// });
-
 
 // Раздел#4  задание #2
 // Валидация отправки формы

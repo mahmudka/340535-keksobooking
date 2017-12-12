@@ -34,7 +34,6 @@ for (var n = 0; n < fieldSet.length; n++) {
   fieldSet[n].disabled = true;
 }
 
-
 // Функция поиска случайного числа в диапазоне от min до max
 var getRandomValues = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -83,7 +82,6 @@ for (var i = 0; i < titles.length; i++) {
   });
 }
 
-
 // Функция для отрисовки маркеров
 var renderMapElement = function (mapDetail) {
   var mapElement = mapPin.cloneNode(true);
@@ -101,7 +99,6 @@ var renderMapElement = function (mapDetail) {
   });
   return mapElement;
 };
-
 
 // Объявление переменных для аноса
 var mapCard = document.querySelector('template').content.querySelector('article.map__card');
@@ -171,7 +168,6 @@ var renderMapCard = function (bookingDetail) {
   return mapCardElement;
 };
 
-
 // Снимаем затемнение
 var isOpen = false;
 mapPinMain.addEventListener('mouseup', function () {
@@ -189,5 +185,85 @@ mapPinMain.addEventListener('mouseup', function () {
   }
   formSubmit.disabled = false;
   isOpen = true;
+
 });
+
+// Валидация отправки формы
+var titleForm = document.querySelector('#title');
+var addressForm = document.querySelector('#address');
+var noticeForm = document.querySelector('.notice__form');
+var timeIn = noticeForm.querySelector('#timein');
+var timeOut = noticeForm.querySelector('#timeout');
+var type = noticeForm.querySelector('#type');
+var typeOptions = type.querySelectorAll('option');
+var price = noticeForm.querySelector('#price');
+var typePrices = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+var rooms = noticeForm.querySelector('#room_number');
+var capacity = noticeForm.querySelector('#capacity');
+
+// Установка обязательных полей и readonly
+addressForm.required = true;
+addressForm.readOnly = true;
+titleForm.required = true;
+price.required = true;
+
+// Синхронизация «времени заезда» и «времени выезда»
+timeIn.addEventListener('change', function () {
+
+  if (timeIn.value) {
+    timeOut.value = timeIn.value;
+  }
+});
+timeOut.addEventListener('change', function () {
+  if (timeOut.value) {
+    timeIn.value = timeOut.value;
+  }
+});
+
+// Синхронизация типа жилья с минимальной ценой
+price.min = typePrices[type.value];
+type.addEventListener('change', function () {
+  var typeValue = type.value;
+  for (i = 0; i < typeOptions.length; i++) {
+    price.min = typePrices[typeValue];
+    price.placeholder = price.min;
+
+  }
+});
+
+// Синхронизация количества гостей с количеством комнат
+capacity.value = rooms.value;
+rooms.addEventListener('change', function () {
+  if (rooms.value) {
+    capacity.value = rooms.value;
+  }
+  if (rooms.value === '100') {
+    capacity.value = 0;
+  }
+});
+capacity.addEventListener('change', function () {
+  if (capacity.value > rooms.value) {
+    capacity.setCustomValidity('Количество комнат не должно превышать количество гостей');
+    capacity.invalid = true;
+  } else {
+    capacity.setCustomValidity('');
+    capacity.invalid = false;
+  }
+});
+
+// Подсветка невалидных полей красным
+var inputForm = noticeForm.querySelectorAll('input');
+for (i = 0; i < inputForm.length; i++) {
+  inputForm[i].addEventListener('invalid', function (evt) {
+    evt.target.style = 'border-color: red';
+  });
+}
+
+});
+
 

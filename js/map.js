@@ -159,7 +159,6 @@ var renderMapCard = function (bookingDetail) {
     activeELement.classList.remove('map__pin--active');
   });
 
-
   window.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       mapCardElement.classList.add('hidden');
@@ -169,7 +168,6 @@ var renderMapCard = function (bookingDetail) {
 
   activeMapCard = mapCardElement;
 
-  // mapCard.appendChild(mapCardElement);
   return mapCardElement;
 };
 
@@ -193,11 +191,30 @@ mapPinMain.addEventListener('mouseup', function () {
   isOpen = true;
 });
 
-// Раздел#4  задание #2
 // Валидация отправки формы
+var titleForm = document.querySelector('#title');
+var addressForm = document.querySelector('#address');
 var noticeForm = document.querySelector('.notice__form');
 var timeIn = noticeForm.querySelector('#timein');
 var timeOut = noticeForm.querySelector('#timeout');
+var type = noticeForm.querySelector('#type');
+var typeOptions = type.querySelectorAll('option');
+var price = noticeForm.querySelector('#price');
+var typePrices = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+var rooms = noticeForm.querySelector('#room_number');
+var capacity = noticeForm.querySelector('#capacity');
+
+// Установка обязательных полей и readonly
+addressForm.required = true;
+addressForm.readOnly = true;
+titleForm.required = true;
+price.required = true;
+
 
 // Синхронизация «времени заезда» и «времени выезда»
 timeIn.addEventListener('change', function () {
@@ -213,26 +230,17 @@ timeOut.addEventListener('change', function () {
 });
 
 // Синхронизация типа жилья с минимальной ценой
-var type = noticeForm.querySelector('#type');
-var typeOptions = type.querySelectorAll('option');
-var price = noticeForm.querySelector('#price');
-var typePrices = {
-  bungalo: 0,
-  flat: 1000,
-  house: 5000,
-  palace: 10000
-};
 price.min = typePrices[type.value];
 type.addEventListener('change', function () {
   var typeValue = type.value;
   for (i = 0; i < typeOptions.length; i++) {
     price.min = typePrices[typeValue];
+    price.placeholder = price.min;
+
   }
 });
 
 // Синхронизация количества гостей с количеством комнат
-var rooms = noticeForm.querySelector('#room_number');
-var capacity = noticeForm.querySelector('#capacity');
 capacity.value = rooms.value;
 rooms.addEventListener('change', function () {
   if (rooms.value) {

@@ -185,6 +185,7 @@ mapPinMain.addEventListener('mouseup', function () {
   }
   formSubmit.disabled = false;
   isOpen = true;
+
 });
 
 // Валидация отправки формы
@@ -262,3 +263,7 @@ for (i = 0; i < inputForm.length; i++) {
     evt.target.style = 'border-color: red';
   });
 }
+
+});
+
+

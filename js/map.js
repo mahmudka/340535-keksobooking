@@ -34,7 +34,6 @@ for (var n = 0; n < fieldSet.length; n++) {
   fieldSet[n].disabled = true;
 }
 
-
 // Функция поиска случайного числа в диапазоне от min до max
 var getRandomValues = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -83,7 +82,6 @@ for (var i = 0; i < titles.length; i++) {
   });
 }
 
-
 // Функция для отрисовки маркеров
 var renderMapElement = function (mapDetail) {
   var mapElement = mapPin.cloneNode(true);
@@ -101,7 +99,6 @@ var renderMapElement = function (mapDetail) {
   });
   return mapElement;
 };
-
 
 // Объявление переменных для аноса
 var mapCard = document.querySelector('template').content.querySelector('article.map__card');
@@ -171,7 +168,6 @@ var renderMapCard = function (bookingDetail) {
   return mapCardElement;
 };
 
-
 // Снимаем затемнение
 var isOpen = false;
 mapPinMain.addEventListener('mouseup', function () {
@@ -214,7 +210,6 @@ addressForm.required = true;
 addressForm.readOnly = true;
 titleForm.required = true;
 price.required = true;
-
 
 // Синхронизация «времени заезда» и «времени выезда»
 timeIn.addEventListener('change', function () {

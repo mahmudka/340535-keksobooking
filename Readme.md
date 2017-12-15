@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Денис Ахраменко](https://up.htmlacademy.ru/javascript/11/user/340535).
-* Наставник: `Неизвестно`.
+* Наставник: `Роман Левченко`.
 
 ---
 

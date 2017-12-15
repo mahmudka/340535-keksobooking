@@ -1,6 +1,7 @@
 // map.js
 
 'use strict';
+
 (function () {
   var map = document.querySelector('.map');
   var mapPins = document.querySelector('.map__pins');
@@ -90,3 +91,5 @@
   });
 
 })();
+
+

@@ -3,7 +3,6 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
   var mapCard = document.querySelector('template').content.querySelector('article.map__card');
 
   var getRussianName = function (russianName) {
@@ -56,7 +55,7 @@
     });
 
     window.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.keyCode === window.ESC_KEYCODE) {
         mapCardElement.classList.add('hidden');
         mapCardElement.classList.remove('map__pin--active');
       }

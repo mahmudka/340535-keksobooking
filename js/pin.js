@@ -21,6 +21,11 @@
       mapElement.classList.add('map__pin--active');
       map.insertBefore(window.renderMapCard(mapDetail), mapFilter);
     });
+    window.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.ESC_KEYCODE) {
+        activeELement.classList.remove('map__pin--active');
+      }
+    });
     return mapElement;
   };
 })();

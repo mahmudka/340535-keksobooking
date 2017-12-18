@@ -6,6 +6,7 @@ window.data = (function () {
   // Объявление констант
   var MARK_WIDTH = 32;
   var MARK_HEIGHT = 65;
+  window.ESC_KEYCODE = 27;
 
   var titles = ['Большая уютная квартира',
     'Маленькая неуютная квартира',

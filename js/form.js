@@ -25,6 +25,30 @@
   titleForm.required = true;
   price.required = true;
 
+  function syncTime(element, value) {
+    element.value = value;
+  }
+
+  function syncType(element, value) {
+    element.setAttribute('min', value);
+  }
+
+  function timeInChange(evt) {
+    window.syncronizeFields.syncValues(timeOut, evt.target.value, syncTime);
+  }
+
+  function timeOutChange(evt) {
+    window.syncronizeFields.syncValues(timeIn, evt.target.value, syncTime);
+  }
+
+  function typePricesChange(evt) {
+    window.syncronizeFields.syncValues(price, typePrices[evt.target.value], syncType);
+  }
+
+  timeIn.addEventListener('change', timeInChange);
+  timeOut.addEventListener('change', timeOutChange);
+  type.addEventListener('change', typePricesChange);
+
   timeIn.addEventListener('change', function () {
 
     if (timeIn.value) {

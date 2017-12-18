@@ -29,7 +29,7 @@
     map.classList.remove('map--faded');
     noticeForm.classList.remove('notice__form--disabled');
     for (var i = 0; i < 8; i++) {
-      mapPins.appendChild(window.showCard(window.bookingDetails[i]));
+      mapPins.appendChild(window.renderMapCard(window.bookingDetails[i]));
     }
     for (n = 0; n < fieldSet.length; n++) {
       fieldSet[n].disabled = false;

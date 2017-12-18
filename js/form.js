@@ -96,5 +96,10 @@
       evt.target.style = 'border-color: red';
     });
   }
+  noticeForm.addEventListener('submit', function (evt) {
+    var formData = new FormData(noticeForm);
+    window.backend.save(formData);
+    evt.preventDefault();
+  });
 
 })();

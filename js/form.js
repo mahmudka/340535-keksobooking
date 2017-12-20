@@ -98,7 +98,31 @@
   }
   noticeForm.addEventListener('submit', function (evt) {
     var formData = new FormData(noticeForm);
-    window.backend.save(formData);
+    window.backend.save(formData, function (response) {
+      if (response) {
+        capacity = capacity.defaultValue;
+        price = price.defaultValue;
+        timeIn = timeIn.defaultValue;
+        timeOut = timeOut.defaultValue;
+      }
+    }, function (errorMessage) {
+      var node = document.createElement('div');
+      node.classList.add('error-message');
+
+      node.textContent = errorMessage;
+
+      if (!errorMessage) {
+        node.textContent = 'Произошла ошибка';
+      }
+
+      document.body.insertAdjacentElement('afterbegin', node);
+      noticeForm.reset();
+
+      setTimeout(function () {
+        document.body.removeChild(node);
+      }, 2000);
+
+    });
     evt.preventDefault();
   });
 
